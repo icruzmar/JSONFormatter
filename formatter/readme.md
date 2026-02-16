@@ -44,6 +44,6 @@ Use this method to quickly test XML snippets by pasting them directly.
 ---
 
 ## Setup and Installation
-1. Clone the repository: `git clone <>`
-2. Navigate to the project folder: `cd `
+1. Clone the repository: `git clone <https://github.com/icruzmar/JSONFormatter>`
+2. Navigate to the project folder: `cd formatter `
 3. Run the application using Maven: `./mvnw spring-boot:run`
