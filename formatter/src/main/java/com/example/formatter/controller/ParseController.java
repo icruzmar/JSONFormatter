@@ -12,19 +12,16 @@ import com.example.formatter.service.IParseService;
 
 /**
  * Controller to handle XML to JSON conversion requests.
- * Controlador para manejar las peticiones de conversión de XML a JSON.
  */
 @RestController
 @RequestMapping("/api/parse")
 public class ParseController {
 
     // Service dependency for logic execution
-    // Dependencia del servicio para ejecutar la logica
     private final IParseService parseService;
 
     /**
      * Constructor for dependency injection
-     * Constructor para la inyección de dependencias
      */
     public ParseController(IParseService parseService){
         this.parseService = parseService;
@@ -32,42 +29,40 @@ public class ParseController {
 
     /**
      * Endpoint to convert an uploaded XML file to JSON
-     * Punto de entrada para convertir un archivo XML subido a JSON
-     * * @param file The XML file sent via multipart request / El archivo XML enviado por peticion multipart
-     * @return ResponseEntity with JSON result or error message / Resultado en JSON o mensaje de error
+     * @param file The XML file sent via multipart request
+     * @return ResponseEntity with JSON result or error message
      */
     @PostMapping("/xml-json-file")
     public ResponseEntity<Object> convert(@RequestParam("file") MultipartFile file) {
         try {
-            // Call service to process the file / Llamada al servicio para procesar el archivo
+            // Call service to process the file
             Object result = parseService.convertXMLFileToJSON(file);
 
-            // Return 200 OK with the result / Retorna 200 OK con el resultado
+            // Return 200 OK with the result
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {
-            // Return 400 Bad Request if something fails / Retorna 400 Bad Request si algo falla
+            // Return 400 Bad Request if something fails
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
     /**
      * Endpoint to convert raw XML text string to JSON
-     * Punto de entrada para convertir una cadena de texto XML puro a JSON
-     * * @param xmlContent The XML string from the request body / El texto XML desde el cuerpo de la petición
-     * @return ResponseEntity with JSON result or error message / Resultado en JSON o mensaje de error
+     * @param xmlContent The XML string from the request body
+     * @return ResponseEntity with JSON result or error message
      */
     @PostMapping(value="/xml-json-raw", consumes = "application/xml")
     public ResponseEntity<Object> convertRaw(@RequestBody String xmlContent) {
         try {
-            // Process the raw string content / Procesa el contenido de la cadena de texto
+            // Process the raw string content
             Object result = parseService.convertXMLRawToJSON(xmlContent);
 
-            // Return successful response / Retorna respuesta exitosa
+            // Return successful response
             return ResponseEntity.ok(result);
 
         } catch (Exception e) {
-            // Handle parsing or logic errors / Maneja errores de parseo o logica
+            // Handle parsing or logic errors
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
