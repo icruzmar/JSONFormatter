@@ -36,6 +36,17 @@ class ParseControllerTest {
                 .andExpect(content().string("JSON OK"));
     }
 
+    @Test
+    void convert_file_invalid() throws Exception{
+        MockMultipartFile file = new MockMultipartFile("file", "test.xml", "text/xml", "<root></root>".getBytes());
+
+        when(parseService.convertXMLFileToJSON(any())).thenThrow(new Exception("Invalid XML format"));
+
+        mockMvc.perform(multipart("/api/parse/xml-json-file").file(file))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Error: Invalid XML format"));
+    }
+
     // Test de Raw
     @Test
     void convert_raw_valid() throws Exception{
@@ -48,5 +59,18 @@ class ParseControllerTest {
                 .content(xmlRaw))
                 .andExpect(status().isOk())
                 .andExpect(content().string("JSON RAW OK"));
+    }
+
+    @Test
+    void convert_raw_invalid() throws Exception{
+        String xmlRaw = "<root></root>";
+
+        when(parseService.convertXMLRawToJSON(any())).thenThrow(new Exception("Invalid XML format"));
+
+        mockMvc.perform(post("/api/parse/xml-json-raw")
+                .contentType("application/xml")
+                .content(xmlRaw))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Error: Invalid XML format"));
     }
 }
